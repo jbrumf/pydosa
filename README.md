@@ -4,7 +4,7 @@ Pydosa is a spectrum analyser application for use with Siglent SDS1000X-E series
 
 The oscilloscope driver is written as a plugin to allow support to be added for other VXI-11 compliant instruments.
 
-For documentation see See [Pydosa Wiki](https://github.com/jbrumf/pydosa/wiki).
+For documentation see the [Pydosa Wiki](https://github.com/jbrumf/pydosa/wiki).
 
 #### Overview
 
