@@ -4,6 +4,8 @@ Pydosa is a spectrum analyser application for use with Siglent SDS1000X-E series
 
 The oscilloscope driver is written as a plugin to allow support to be added for other VXI-11 compliant instruments.
 
+For documentation see See [Pydosa Wiki](https://github.com/jbrumf/pydosa/wiki).
+
 #### Overview
 
 Modern digital oscilloscopes typically have an FFT function that allows display of the signal spectrum. On low cost instruments it is often difficult to adjust the settings to obtain the desired spectrum plot.
@@ -54,10 +56,6 @@ If the instrument is not detected, check that the computer and oscilloscope are 
 #### Simulator
 
 Pydosa has a built-in signal simulator. It was originally written to allow Pydosa to be tested using signals with precisely known properties. However, it may be useful for demonstrating the program when a suitable oscilloscope is not available. To enter simulation mode, select `Open simulator` from the File menu. Controls for the simulator should appear on the right-hand side of the main window.
-
-#### Documentation
-
-See [Pydosa Wiki](https://github.com/jbrumf/pydosa.wiki)
 
 #### License
 
