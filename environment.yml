@@ -1,0 +1,11 @@
+name: pydosa
+channels:
+  - defaults
+dependencies:
+  - python>=3.10
+  - pip
+  - numpy
+  - scipy
+  - pip:
+      - python-vxi11>=0.9
+
