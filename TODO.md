@@ -36,7 +36,7 @@
 - The process 'after' loop keeps running when in the paused state
   or no instrument is open.
 
-- Add Python type hints, especially in relation to the scope driver.
+- Add Python type hints
 
 - Preference to set #samples averaged
 

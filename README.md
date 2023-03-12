@@ -75,6 +75,4 @@ This mechanism may fail if port 111 is blocked by a firewall.
 
 #### Known Issues
 
-- When entering numeric values, it is necessary to press Enter to accept the value. Simply changing the focus by selecting another widget is not sufficient.
-
 - *Scope lock-up:* If Pydosa is killed while the oscilloscope scope is transferring data, it may cause the scope controls to lock up. To recover, power the scope off and on again.
