@@ -1,65 +1,39 @@
-### Pydosa - Digital Oscilloscope Spectrum Analyzer
+## Pydosa - Digital Oscilloscope Spectrum Analyzer
 
-Pydosa is a spectrum analyser application for use with Siglent SDS1000X-E series oscilloscopes.
+Pydosa is a spectrum analyser application for use with VXI-11 compliant digital oscilloscopes. It currently has support for the Siglent SDS1000X-E and SDS1000X-U series oscilloscopes. The oscilloscope driver is written as a plugin to allow support to be added for other instruments.
 
-The oscilloscope driver is written as a plugin to allow support to be added for other VXI-11 compliant instruments.
+Pydosa also has a built-in signal simulator. It was originally written to allow the software to be tested using signals with precisely known properties. However, it may be useful for demonstrating the program when a suitable oscilloscope is not available.
 
-For documentation see the [Pydosa Wiki](https://github.com/jbrumf/pydosa/wiki).
+For installation instructions and other documentation see the [Pydosa Wiki](https://github.com/jbrumf/pydosa/wiki) :
 
-#### Overview
+- [User Guide](https://github.com/jbrumf/pydosa/wiki/User_Guide)
 
-Modern digital oscilloscopes typically have an FFT function that allows display of the signal spectrum. On low cost instruments it is often difficult to adjust the settings to obtain the desired spectrum plot.
+- [FFT Spectral Analysis](https://github.com/jbrumf/pydosa/wiki/Spectral_Analysis)
 
-Pydosa runs on a computer and connects to the oscilloscope via a LAN network. This allows a better user interface for easier control and display on a larger screen.
+- [Writing an Oscilloscope Driver](https://github.com/jbrumf/pydosa/wiki/Writing_Driver)
 
-#### System Requirements
+- [README](https://github.com/jbrumf/pydosa#readme)
+
+### System Requirements
 
 * macOS, Windows 10 or Linux system
 * Python 3.10 or later
 
 It should also work on Windows 11, but this has not been tested.
 
-#### Instruments Supported
+### Instruments Supported
 
 Pydosa currently supports the following oscilloscopes:
 
-* Siglent SDS1104X-E, SDS1204X-E
+* Siglent SDS1104X-E, SDS1204X-E, SDS1104X-U
 
-#### Installation
+It has only been tested on the SDS1104X-E and SDS1204X-E, but is expected to work on the SDS1104X-U.
 
-To install from the source distribution using conda:
-
-    cd pydosa
-    conda env create -f environment.yml
-    conda activate pydosa
-
-To install from the source distribution using setuptools (with python>=3.10):
-
-    cd pydosa
-    python setup.py install
-
-Pydosa may be made available as a PyPI and/or Conda package at a later date.
-
-#### Running Pydosa
-
-- Connect the oscilloscope to the LAN and configure its IP address
-- Run: python -m pydosa
-- Select instrument when prompted
-- The spectrum window should appear after a few seconds
-- Connect a signal to channel 1 of the oscilloscope
-- Adjust the vertical gain on the oscilloscope
-
-Pydosa controls the oscilloscope while it is running. The only controls you should adjust manually are those for the vertical channel to ensure that the waveform is filling several vertical divisions without clipping. If the input is clipped it will result in spurious spectral components. If the input level is too low it will increase the quantization noise.
-
-If the instrument is not detected, check that the computer and oscilloscope are on the same LAN subnet. Problems may be encountered if there is a firewall blocking the connection (see Networking Issues below).
-
-#### Simulator
-
-Pydosa has a built-in signal simulator. It was originally written to allow Pydosa to be tested using signals with precisely known properties. However, it may be useful for demonstrating the program when a suitable oscilloscope is not available. To enter simulation mode, select `Open simulator` from the File menu. Controls for the simulator should appear on the right-hand side of the main window.
-
-#### License
+### License
 
 MIT License (see LICENSE file)
+
+### Known Issues
 
 #### Networking Issues
 
@@ -73,6 +47,6 @@ This mechanism may fail if port 111 is blocked by a firewall.
 
 * *MacOS firewall:* If the macOS firewall is enabled, the Mac will prompt the user to accept the VXI-11 network connection. Once it has been accepted once, it should not prompt when run again.
 
-#### Known Issues
+#### Other Issues
 
-- *Scope lock-up:* If Pydosa is killed while the oscilloscope scope is transferring data, it may cause the scope controls to lock up. To recover, power the scope off and on again.
+- *Scope lock-up:* If Pydosa is killed while the oscilloscope is transferring data, it may cause the scope controls to lock up. To recover, power the scope off and on again.

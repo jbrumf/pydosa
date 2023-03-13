@@ -82,7 +82,7 @@ class SpectrumWidget(Canvas):
         size = len(plotx)  # Number of frequency bins in span
         ploty = ploty * (-VSCALE / self.dbscale) + VOFF  # Convert dB to pixels
 
-        ka = (fmax-fmin)/srate * (2*nsamp)/width
+        ka = (fmax - fmin) / srate * (2 * nsamp) / width
         if self.info_handler:
             self.info_handler('Bins/pixel=%.2f' % ka)
         k = int(ka)

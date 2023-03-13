@@ -12,8 +12,9 @@ Copyright (c) 2020 Jon Brumfitt
 
 import threading
 import time
-from pydosa.util.units import decode_unit_prefix
+
 from pydosa.dsa.scope_driver import ScopeDriver
+from pydosa.util.units import decode_unit_prefix
 
 lock = threading.Lock()
 

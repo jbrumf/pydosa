@@ -18,7 +18,7 @@ class Driver(ScopeDriver):
 
     # Instruments supported by this driver
     make = 'Siglent'
-    models = ['SDS1104X-E', 'SDS1204X-E']
+    models = ['SDS1104X-E', 'SDS1204X-E', 'SDS1104X-U']
     min_firmware = '7.3.6.1.37R9'
 
     # Sample rates and corresponding times per division
@@ -34,7 +34,6 @@ class Driver(ScopeDriver):
         """Initialization"""
         self.__scope = None
         self.nsamples = 0
-        self.t = time.time()
 
     def open(self, instrument):
         """Open the driver."""

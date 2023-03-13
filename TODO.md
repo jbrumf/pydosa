@@ -4,9 +4,7 @@
 
 #### Thing to Check
 
-- Check that averaging gets reset properly when settings are
-  changed. The one measurement cycle delay introduced by the
-  threading may cause this to go wrong.
+- Check that averaging gets reset properly when settings are changed. The one measurement cycle delay introduced by the threading may cause this to go wrong.
 
 #### Known Issues
 
@@ -17,24 +15,21 @@
 
 - Spectrum can obscure the frequency labels. Need to clip Y.
 
+- Simulator doesn't save amplitude units
+
 #### Proposed Enhancements:
 
-- Support resizing of main window.
+- Add driver for Rigol DS1000Z series oscilloscopes (currently under development).
 
-- The GUI is pixel based. It may need scaling option for hi-resolution 
-  displays (e.g. 3840x2160). The plot size could be configurable parameters.
+- The GUI is pixel based. It may need scaling option for hi-resolution displays (e.g. 3840x2160). The plot size could be configurable parameters.
 
-- Add option to enter explicit IP address. This may be useful if
-  a firewall is blocking port 111 (TBC).
+- Add option to enter explicit IP address. This may be useful if a firewall is blocking port 111 (TBC).
 
 - Maybe Close Connection should close the simulator control panel?
 
 - The 'delay' property can be reintroduced now that sim runs in thread
 
-- Display blank grid before first instrument/simulator opened
-
-- The process 'after' loop keeps running when in the paused state
-  or no instrument is open.
+- The process 'after' loop keeps running when in the paused state or no instrument is open.
 
 - Add Python type hints
 
@@ -48,16 +43,9 @@
 
 #### Enhancements to Consider
 
-- Zoom using mouse in addition to span, level, dB/div controls?
+- Should scope driver 'prepare' method cancel any math mode or decoding mode?
 
-- Should scope driver 'prepare' method cancel any math mode or
-  decoding mode?
-
-- Should scope driver specify scope bandwidth so that it can be
-  used for the initial span?
-
-- Should widgets be in a panel on the right instead of top and
-  bottom? They could be grouped into Vertical and Horizontal.
+- Should widgets be in a panel on the right instead of top and bottom? They could be grouped into Vertical and Horizontal.
   Simulator controls could be in a separate window.
 
 - Check-boxes to allow multiple plots for min, max, mean, etc?

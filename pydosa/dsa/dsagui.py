@@ -5,6 +5,7 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 import sys
+import time
 from tkinter import Frame, Button, Label, OptionMenu, StringVar, Menu
 from tkinter import Tk
 from tkinter import messagebox
@@ -15,14 +16,13 @@ from pydosa.dsa import instrument
 from pydosa.dsa.analyzer import Analyzer
 from pydosa.dsa.frequency_widget import FrequencyWidget
 from pydosa.dsa.preferences_dialog import PreferencesDialog
+from pydosa.dsa.scope_thread import ScopeThread
 from pydosa.dsa.spectrum_widget import SpectrumWidget
 from pydosa.sim.sim_driver import SimDriver
 from pydosa.sim.wavegen import WaveGen
 from pydosa.sim.wavegen_panel import WavegenPanel
 from pydosa.util.preferences_manager import PreferencesManager
 from pydosa.util.settable_option_menu import SettableOptionMenu
-from pydosa.dsa.scope_thread import ScopeThread
-import time
 
 # Window geometry
 PLOT_WIDTH = 1024  # Pixels
@@ -90,12 +90,6 @@ class DsaGui(object):
         self._running = value
         self.set_run_button(value)  # FIXME: Perhaps only if changed?
 
-    def start_app(self, root):
-        """Start application after event loop is started"""
-        driver = instrument.choose_instrument(self.prefs, root)
-        self.connect(driver)
-        self.start()
-
     # ---------- Application logic ----------
 
     def connect(self, driver):
@@ -127,8 +121,8 @@ class DsaGui(object):
             messagebox.showwarning('Error',
                                    'Cannot connect to instrument')
 
-    def start(self):
-        """Start the analyzer if not already running"""
+    def start_app(self, root):
+        """Start application after event loop is started"""
         if self.thread is not None:
             self.running = True
         self.run_loop()
@@ -185,7 +179,6 @@ class DsaGui(object):
         self.prefs.save()
         self.root.quit()
         sys.exit()
-
 
     # ---------- User interface ----------
 
@@ -291,7 +284,7 @@ class DsaGui(object):
         self.rbw_var = StringVar()
         self.rbw_var.set(' ')
         rbw_label = Label(upper_frame, textvariable=self.rbw_var,
-                           relief=SUNKEN, width=6)
+                          relief=SUNKEN, width=6)
         rbw_label.grid(row=0, column=col)
         label = Label(upper_frame, text='RBW Hz')
         label.grid(row=1, column=col)
@@ -345,9 +338,8 @@ class DsaGui(object):
         self.samples_callback(initial_size)
 
     def show_message(self, message):
-        "Display a message on the info line."
+        """Display a message on the info line."""
         self.__infovar.set(message)
-
 
     # ---------- GUI callbacks ----------
 

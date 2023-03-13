@@ -12,9 +12,7 @@ import math
 
 import numpy as np
 
-from pydosa.dsa.scope_driver import ScopeDriver
 from pydosa.util.units import decode_unit_prefix
-import time
 
 DB3 = 10 * math.log10(2)  # 3dB
 Z0 = 50  # Impedance for dBm (ohms)
