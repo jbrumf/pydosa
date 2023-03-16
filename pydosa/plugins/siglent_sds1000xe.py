@@ -84,5 +84,6 @@ class Driver(ScopeDriver):
     def close(self):
         """Close the driver."""
         if self.__scope:
+            self.__scope.write('TRMD AUTO')  # Restore triggering
             self.__scope.close()
             self.__scope = None

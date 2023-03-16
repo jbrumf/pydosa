@@ -35,12 +35,14 @@ class ScopeThread(threading.Thread):
         while not self.stop:
             while self.is_ready():
                 if self.stop:
+                    self.driver.close()
                     return
                 time.sleep(0.01)
             nsamples = int(decode_unit_prefix(self.nsamples_option))
             data = self.driver.fetch_data(nsamples, self.srate_option)
             with lock:
                 self.data = data  # Make the data available
+        self.driver.close()
 
     def get_data(self, nsamples_option, srate_option):
         """Called from main thread to get next set of data.
