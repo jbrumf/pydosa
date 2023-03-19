@@ -158,6 +158,7 @@ class DsaGui(object):
         elif self.thread is None:
             # FIXME: No need to redraw unless there has been a change event
             self.plotter.clear(self.fstart, self.fstop)
+            self.wavepane.pack_forget()
             self.root.update()
         self.root.after(10, self.run_loop)
 
