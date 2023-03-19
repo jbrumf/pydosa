@@ -10,7 +10,7 @@ UNIT_PREFIXES = {'Gi': 1073741824, 'G': 1E9, 'Mi': 1048576, 'M': 1E6, 'Ki': 1024
 METRIC_SUFFIXES = ['n', '\u03BC', 'm', '', 'k', 'M', 'G', 'T']
 
 
-def decode_unit_prefix(string: str, delim='') -> float:
+def decode_unit_prefix(string: str, delim: str = '') -> float:
     """Decode value with IEC unit prefix (Gi, Mi, Ki) or SI prefix (G, M, k)."""
     n = string.find(delim)
     if n > 0:
@@ -21,7 +21,7 @@ def decode_unit_prefix(string: str, delim='') -> float:
     return float(string)
 
 
-def encode_metric_prefix(value) -> str:
+def encode_metric_prefix(value: float) -> str:
     """Encode number using metric (SI) unit prefix (e.g. m, k, M, G)."""
     s = "%.8E" % value
     x = s.split('E')

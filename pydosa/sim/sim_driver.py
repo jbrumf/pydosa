@@ -5,8 +5,11 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 
+from numpy import array as npa
+
 from pydosa.dsa.scope_driver import ScopeDriver
 from pydosa.util.units import decode_unit_prefix
+
 
 class SimDriver(ScopeDriver):
     """Adapter to make the WaveGen look like an instrument driver."""
@@ -26,16 +29,16 @@ class SimDriver(ScopeDriver):
         """Initialization"""
         self.wavegen = wavegen
 
-    def open(self, connection):
+    def open(self, connection) -> None:
         pass
 
-    def prepare(self):
+    def prepare(self) -> None:
         pass
 
-    def fetch_data(self, nsamples, srate_option):
+    def fetch_data(self, nsamples: int, srate_option: str) -> tuple[npa, float]:
         srate = decode_unit_prefix(srate_option)
         return self.wavegen.generate(nsamples, srate)
 
-    def close(self):
+    def close(self) -> None:
         """Close the WaveGen."""
         pass

@@ -16,12 +16,13 @@ class ChooserDialog(ModalDialog):
     """GUI dialog for choosing an item."""
 
     @classmethod
-    def ask(cls, parent, items, title='Choose item', message=None):
+    def ask(cls, parent, items: list[str], title: str = 'Choose item',
+            message: str = None) -> str:
         """Show the dialog and return updated preferences."""
         dialog = ChooserDialog(parent, items, title, message)
         return dialog.result
 
-    def __init__(self, parent, items, title, message):
+    def __init__(self, parent, items: list[str], title: str, message: str):
         """Initialization"""
         self.items = items
         self.message = message
@@ -29,7 +30,7 @@ class ChooserDialog(ModalDialog):
         self.result = None
         ModalDialog.__init__(self, parent, title)
 
-    def create_content(self, master):
+    def create_content(self, master) -> None:
         """Create the dialog widgets."""
         label = Label(master, text=self.message)
         label.pack()

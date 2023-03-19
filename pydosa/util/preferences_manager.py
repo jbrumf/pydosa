@@ -21,7 +21,7 @@ class PreferencesManager(object):
         self.config = ConfigParser()  # Access ConfigParser here
         self._load_preferences()
 
-    def _load_preferences(self):
+    def _load_preferences(self) -> None:
         """Load the user preferences"""
 
         # Load the defaults
@@ -37,14 +37,14 @@ class PreferencesManager(object):
         with open(self.preferences_file, 'w') as configfile:
             self.config.write(configfile)
 
-    def load(self):
+    def load(self) -> None:
         """Load the user preferences file."""
         self.config.read(self.preferences_file)
 
-    def save(self):
+    def save(self) -> None:
         """Save the preferences to the user preferences file."""
         with open(self.preferences_file, 'w') as configfile:
             self.config.write(configfile)
 
-    def _log(self, message):
+    def _log(self, message: str) -> None:
         print(message)

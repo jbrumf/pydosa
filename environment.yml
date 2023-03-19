@@ -6,6 +6,7 @@ dependencies:
   - pip
   - numpy
   - scipy
+  - pytest
   - pip:
       - python-vxi11>=0.9
 

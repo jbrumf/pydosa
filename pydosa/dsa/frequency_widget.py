@@ -12,7 +12,7 @@ MAX_FREQ = 1E8  # Initial maximum frequency (Hz)
 MAXIMUM = 5E8  # Maximum allowed frequency
 MIN_SPAN = 10  # Minimum span (Hz)
 
-ENTRY_WIDTH = 12  # Width of Entry fields
+ENTRY_WIDTH = 9  # Width of Entry fields
 
 UNITS_DICT = {'MHz': 1e6, 'kHz': 1e3, 'Hz': 1}
 
@@ -23,15 +23,15 @@ INVALID_COLOR = "#FF0000"
 class FrequencyWidget(Frame):
     """GUI widget for entering a frequency range."""
 
-    def __init__(self, parent, callback=None):
+    def __init__(self, parent, callback=None, fmin: float = MIN_FREQ, fmax: float = MAX_FREQ):
         """Initialization - Create the widget"""
         self.scale = 1e6
 
         Frame.__init__(self, parent)
         self.parent = parent
         self.callback = callback
-        self.fmin = MIN_FREQ
-        self.fmax = MAX_FREQ
+        self.fmin = fmin
+        self.fmax = fmax
 
         mode_options = ['Min/Max', 'Centre/Span']
         self.mode = mode_options[0]
@@ -71,7 +71,7 @@ class FrequencyWidget(Frame):
         # self.unitsbox.config(width=3)
         self.unitsbox.pack(side=LEFT)
 
-    def units_callback(self, option):
+    def units_callback(self, option) -> None:
         """Callback to change frequency units"""
         scale = UNITS_DICT[option]
 
@@ -86,7 +86,7 @@ class FrequencyWidget(Frame):
             self.scale = scale
             self.changed(None)
 
-    def mode_callback(self, option):
+    def mode_callback(self, option) -> None:
         """Callback for mode option menu (Min/Max or Centre/Span)"""
         mode = self.mode_var.get()
         if mode == self.mode:  # Ignore if mode hasn't changed
@@ -122,7 +122,7 @@ class FrequencyWidget(Frame):
 
     # Something changed in one of the entry fields
 
-    def changed(self, *arg):
+    def changed(self, *arg) -> None:
         """Highlight invalid entries"""
         ok, fmin, fmax = self.validate()
         if ok:
@@ -132,7 +132,7 @@ class FrequencyWidget(Frame):
             self.entry1.config(fg=INVALID_COLOR)
             self.entry2.config(fg=INVALID_COLOR)
 
-    def validate(self):
+    def validate(self) -> tuple[bool, float, float]:
         """Parse and validate the entry fields"""
         fmin = self.fmin
         fmax = self.fmax
@@ -159,7 +159,7 @@ class FrequencyWidget(Frame):
 
         return valid, fmin, fmax  # Ignore fmin/fmax if not valid
 
-    def accept_callback(self, event):
+    def accept_callback(self, event) -> None:
         """Called when Enter/Return key pressed in one of the
            entry fields or focus is lost"""
         ok, fmin, fmax = self.validate()

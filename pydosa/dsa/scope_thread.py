@@ -13,6 +13,8 @@ Copyright (c) 2020 Jon Brumfitt
 import threading
 import time
 
+from numpy import array as npa
+
 from pydosa.dsa.scope_driver import ScopeDriver
 from pydosa.util.units import decode_unit_prefix
 
@@ -21,7 +23,7 @@ lock = threading.Lock()
 
 class ScopeThread(threading.Thread):
 
-    def __init__(self, driver):
+    def __init__(self, driver: ScopeDriver):
         threading.Thread.__init__(self)
         self.driver: ScopeDriver = driver
         self.driver.prepare()
@@ -31,7 +33,7 @@ class ScopeThread(threading.Thread):
         self.srate_option = '1G'
         self.nsamples_option = '1Mi'
 
-    def run(self):
+    def run(self) -> None:
         while not self.stop:
             while self.is_ready():
                 if self.stop:
@@ -44,7 +46,7 @@ class ScopeThread(threading.Thread):
                 self.data = data  # Make the data available
         self.driver.close()
 
-    def get_data(self, nsamples_option, srate_option):
+    def get_data(self, nsamples_option: str, srate_option: str) -> npa:
         """Called from main thread to get next set of data.
            nsamples & srate apply to the next acquisition.
         """
@@ -56,11 +58,11 @@ class ScopeThread(threading.Thread):
             self.data = None
             return data
 
-    def is_ready(self):
+    def is_ready(self) -> bool:
         """Return True if data is ready."""
         with lock:
             return self.data is not None
 
-    def close(self):
+    def close(self) -> None:
         """Interrupt the thread."""
         self.stop = True

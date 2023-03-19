@@ -32,59 +32,59 @@ class Driver(ScopeDriver):
 
     def __init__(self):
         """Initialization"""
-        self.__scope = None
+        self._scope = None
         self.nsamples = 0
 
-    def open(self, instrument):
+    def open(self, instrument) -> None:
         """Open the driver."""
-        self.__scope = instrument
+        self._scope = instrument
 
-    def prepare(self):
+    def prepare(self) -> None:
         """Configure the oscilloscope."""
-        self.__scope.write('STOP')  # Put scope in a known state
-        self.__scope.write('TRMD SINGLE')
-        self.__scope.write('ACQW SAMPLING')  # Normal acquisition mode
-        self.__scope.write('MSIZ 14M')  # Must not be stopped for this
-        self.__scope.write('STOP')
-        self.__scope.write('CHDR OFF')  # Don't return headers
-        self.__scope.write('C1:TRA ON')  # Channel 1 only
-        self.__scope.write('C2:TRA OFF')
-        self.__scope.write('C3:TRA OFF')
-        self.__scope.write('C4:TRA OFF')
-        self.__scope.write('C1:UNIT V')
-        self.__scope.write('TDIV 1E-3')
-        _ = self.__scope.ask('INR?')  # Clear status
+        self._scope.write('STOP')  # Put scope in a known state
+        self._scope.write('TRMD SINGLE')
+        self._scope.write('ACQW SAMPLING')  # Normal acquisition mode
+        self._scope.write('MSIZ 14M')  # Must not be stopped for this
+        self._scope.write('STOP')
+        self._scope.write('CHDR OFF')  # Don't return headers
+        self._scope.write('C1:TRA ON')  # Channel 1 only
+        self._scope.write('C2:TRA OFF')
+        self._scope.write('C3:TRA OFF')
+        self._scope.write('C4:TRA OFF')
+        self._scope.write('C1:UNIT V')
+        self._scope.write('TDIV 1E-3')
+        _ = self._scope.ask('INR?')  # Clear status
 
-    def fetch_data(self, nsamples, srate_option):
+    def fetch_data(self, nsamples: int, srate_option: str) -> tuple[np.array, float]:
         """Acquire sample data, scaled to volts"""
         self.nsamples = nsamples
         tdiv = self.SRATE_TO_TDIV[srate_option]
-        self.__scope.write('TDIV ' + tdiv)
-        self.__scope.write('TRMD SINGLE')
-        _ = self.__scope.ask('INR?')  # Clear status
-        self.__scope.write('ARM')
+        self._scope.write('TDIV ' + tdiv)
+        self._scope.write('TRMD SINGLE')
+        _ = self._scope.ask('INR?')  # Clear status
+        self._scope.write('ARM')
 
         # Wait for acquisition to complete
         for i in range(100):
-            inr = int(self.__scope.ask('INR?'))
+            inr = int(self._scope.ask('INR?'))
             if inr & 1 == 1:
                 break
             time.sleep(0.02)
 
         # Get the samples from the scope and scale to volts
-        self.__scope.write('WFSU SP,1,NP,{},FP,0'.format(self.nsamples))
-        self.__scope.write('C1:WF? DAT2')
-        data = self.__scope.read_raw()
-        vdiv = float(self.__scope.ask('C1:VDIV?'))
-        ofst = float(self.__scope.ask('C1:OFST?'))
-        sara = decode_unit_prefix(self.__scope.ask('SARA?'))
+        self._scope.write('WFSU SP,1,NP,{},FP,0'.format(self.nsamples))
+        self._scope.write('C1:WF? DAT2')
+        data = self._scope.read_raw()
+        vdiv = float(self._scope.ask('C1:VDIV?'))
+        ofst = float(self._scope.ask('C1:OFST?'))
+        sara = decode_unit_prefix(self._scope.ask('SARA?'))
         data = np.array(bytearray(data), dtype=np.int8)[16:-2]
         data = data * (vdiv / 25.0) + ofst
         return data, sara
 
-    def close(self):
+    def close(self) -> None:
         """Close the driver."""
-        if self.__scope:
-            self.__scope.write('TRMD AUTO')  # Restore triggering
-            self.__scope.close()
-            self.__scope = None
+        if self._scope:
+            self._scope.write('TRMD AUTO')  # Restore auto triggering
+            self._scope.close()
+            self._scope = None

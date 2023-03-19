@@ -18,11 +18,32 @@ class WavegenPanel(Frame):
     def __init__(self, parent, wavegen):
         Frame.__init__(self, parent)
         self.parent = parent
+
+        self.var_nsamples = None
+        self.entry_nsamples = None
+        self.entry_nsamples = None
+        self.var_freq = None
+        self.var_ampl = None
+        self.entry_quant = None
+        self.var_quant = None
+        self.var_noise_units = None
+        self.entry_noise = None
+        self.var_noise = None
+        self.entry_dc = None
+        self.var_dc = None
+        self.entry_amdepth = None
+        self.var_amdepth = None
+        self.entry_amfreq = None
+        self.var_amfreq = None
+        self.var_ampl_units = None
+        self.entry_ampl = None
+        self.entry_freq = None
+
         self.wavegen = wavegen
         self.config = wavegen.config
         self.create_gui(self)
 
-    def create_gui(self, parent):
+    def create_gui(self, parent) -> None:
         """Create the user interface"""
 
         padx = 5
@@ -182,14 +203,14 @@ class WavegenPanel(Frame):
 
     # ----- Frequency callbacks -----
 
-    def frequency_accept(self, arg):
+    def frequency_accept(self, arg) -> None:
         """Callback for change of frequency."""
         value = self.validate_frequency()
         if value is not None:
             self.wavegen.freq = value
             self.config['freq'] = value
 
-    def validate_frequency(self, *arg):
+    def validate_frequency(self, *arg) -> float | None:
         """Highlight the frequency if the value is invalid."""
         try:
             var = self.var_freq.get()
@@ -197,6 +218,7 @@ class WavegenPanel(Frame):
             if value <= 0:
                 raise ValueError()
             self.entry_freq.config(fg=TEXT_COLOR)
+            print(type(var))
             return var
         except ValueError:
             self.entry_freq.config(fg=INVALID_COLOR)
@@ -204,14 +226,14 @@ class WavegenPanel(Frame):
 
     # ----- Amplitude callbacks -----
 
-    def amplitude_accept(self, arg):
+    def amplitude_accept(self, arg) -> None:
         """Callback for change of amplitude."""
         value = self.validate_amplitude()
         if value is not None:
             self.wavegen.amplitude = value
             self.config['amplitude'] = value
 
-    def validate_amplitude(self, *arg):
+    def validate_amplitude(self, *arg) -> float | None:
         """Highlight the amplitude if the value is invalid."""
         try:
             var = self.var_ampl.get()
@@ -222,7 +244,7 @@ class WavegenPanel(Frame):
             self.entry_ampl.config(fg=INVALID_COLOR)
             return None
 
-    def amplitude_units(self, option):
+    def amplitude_units(self, option) -> None:
         """Callback to change the amplitude units"""
         self.amplitude_accept(option)
         units = self.var_ampl_units.get()
@@ -231,14 +253,14 @@ class WavegenPanel(Frame):
 
     # ----- AM frequency -----
 
-    def amfreq_accept(self, arg):
+    def amfreq_accept(self, arg) -> None:
         """Callback to change the AM modulation frequency"""
         value = self.validate_amfreq()
         if value is not None:
             self.wavegen.mod_freq = value
             self.config['mod_freq'] = value
 
-    def validate_amfreq(self, *arg):
+    def validate_amfreq(self, *arg) -> float | None:
         """Highlight the AM frequency if the value is invalid."""
         try:
             var = self.var_amfreq.get()
@@ -251,14 +273,14 @@ class WavegenPanel(Frame):
 
     # ----- AM mod depth -----
 
-    def amdepth_accept(self, arg):
+    def amdepth_accept(self, arg) -> None:
         """Callback to change the AM modulation depth"""
         value = self.validate_amdepth()
         if value is not None:
             self.wavegen.mod_depth = value
             self.config['mod_depth'] = value
 
-    def validate_amdepth(self, *arg):
+    def validate_amdepth(self, *arg) -> float | None:
         """Highlight the AM modulation depth if the value is invalid."""
         try:
             var = self.var_amdepth.get()
@@ -271,14 +293,14 @@ class WavegenPanel(Frame):
 
     # ----- Number of samples -----
 
-    def nsamples_accept(self, arg):
+    def nsamples_accept(self, arg) -> None:
         """Callback to change the number of samples"""
         value = self.validate_nsamples()
         if value is not None:
             self.wavegen.nsamples = value
             self.config['nsamples'] = value
 
-    def validate_nsamples(self, *arg):
+    def validate_nsamples(self, *arg) -> float | None:
         """Highlight the number of samples if the value is invalid."""
         try:
             var = self.var_nsamples.get()
@@ -291,14 +313,14 @@ class WavegenPanel(Frame):
 
     # ----- DC offset -----
 
-    def dc_accept(self, arg):
+    def dc_accept(self, arg) -> None:
         """Callback to change the DC offset"""
         value = self.validate_dc()
         if value is not None:
             self.wavegen.dc = value
             self.config['dc'] = value
 
-    def validate_dc(self, *arg):
+    def validate_dc(self, *arg) -> float | None:
         """Highlight the DC offset if the value is invalid."""
         try:
             var = self.var_dc.get()
@@ -311,14 +333,14 @@ class WavegenPanel(Frame):
 
     # ----- Noise -----
 
-    def noise_accept(self, arg):
+    def noise_accept(self, arg) -> None:
         """Callback to change the noise amplitude"""
         value = self.validate_noise()
         if value is not None:
             self.wavegen.noise = value
             self.config['noise'] = value
 
-    def validate_noise(self, *arg):
+    def validate_noise(self, *arg) -> float | None:
         """Highlight the noise amplitude if the value is invalid."""
         try:
             var = self.var_noise.get()
@@ -329,7 +351,7 @@ class WavegenPanel(Frame):
             self.entry_noise.config(fg=INVALID_COLOR)
             return None
 
-    def noise_units(self, option):
+    def noise_units(self, option) -> None:
         """Callback to change the noise units"""
         self.noise_accept(option)
         units = self.var_noise_units.get()
@@ -338,14 +360,14 @@ class WavegenPanel(Frame):
 
     # ----- Quantization -----
 
-    def quantization_accept(self, arg):
+    def quantization_accept(self, arg) -> None:
         """Callback to change the quantization"""
         value = self.validate_quantization()
         if value is not None:
             self.wavegen.quantization = value
             self.config['quantization'] = value
 
-    def validate_quantization(self, *arg):
+    def validate_quantization(self, *arg) -> float | None:
         """Highlight the quantization if the value is invalid."""
         try:
             var = self.var_quant.get()

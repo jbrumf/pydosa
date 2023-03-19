@@ -8,9 +8,16 @@ import math
 from tkinter import Canvas, N, W
 
 import numpy as np
+from numpy import array as npa
 
-from pydosa.util import util, units
+from pydosa.util import units, util
 
+# Window geometry
+PLOT_WIDTH = 1024  # Pixels
+PLOT_HEIGHT = 620  # Pixels
+PLOT_MARGIN = 30  # Pixels
+
+# Geometry
 VDIVS = 14  # Vertical divisions
 VSCALE = 40  # pixels / vertical division
 VOFF = 20  # Margin at top (pixels)
@@ -18,22 +25,26 @@ HOFF = 35  # Horizontal offset
 BORDER = 0
 FTICKS = 10  # Preferred number of frequency tick marks
 
-PLOT_WIDTH = 1024  # Width of plot (pixels) FIXME: TEMPORARY
-
+# Colours
 TRACE_COLOR = "#FFFF30"
 GRID_COLOR = "#606060"
 AXIS_COLOR = "#B0B0B0"
 TEXT_COLOR = "#FFFFFF"
 
+# Constants
+DB3 = 10 * math.log10(2)  # 3 dB
+
 
 class SpectrumWidget(Canvas):
     """GUI widget to display the spectrum."""
 
-    def __init__(self, parent, width, height, info_handler=None):
+    # def __init__(self, parent, width, height, info_handler=None):
+    def __init__(self, parent, info_handler=None):
         """Initialization"""
+        width = PLOT_WIDTH + 2 * PLOT_MARGIN
 
         # Old-style super call as Canvas is not a new-style class
-        Canvas.__init__(self, parent, width=width, height=height,
+        Canvas.__init__(self, parent, width=width, height=PLOT_HEIGHT,
                         background="black", borderwidth=BORDER,
                         relief='raised')
         self.pack(padx=10, pady=10)
@@ -41,28 +52,44 @@ class SpectrumWidget(Canvas):
         self.info_handler = info_handler
 
         self.fmin = 0
-        self.fmax = 1e7
+        self.fmax = 0
+        self.sample_rate = 0
         self.ntick = FTICKS
         self.dbscale = 10
         self.level = 0
+        self.units = 'dBm'
 
-    def set_range(self, fmin, fmax):
+    def set_range(self, fmin: float, fmax: float) -> None:
         """Set the frequency range."""
         self.fmin = fmin
         self.fmax = fmax
 
-    def clear(self, fstart, fstop):
+    def clear(self, fstart: float, fstop: float) -> None:
         """Clear spectrum, just leaving grid"""
         self.set_range(fstart, fstop)
         self.delete("all")
         self.draw_grid()
 
-    def plot_spectrum(self, data, srate):
-        """Plot the spectrum"""
+    def plot_spectrum(self, data: npa, srate: float) -> None:
+        """Plot the spectrum (data in dBV)"""
         width = PLOT_WIDTH  # X pixels
         nsamp = len(data)  # No. of FFT bins
         fmin = self.fmin
         fmax = self.fmax
+
+        # Scale to required units
+        offset_db = 0
+        match self.units:
+            case 'dBV':  # RMS
+                pass
+            case 'dBm':
+                offset_db += 10 + DB3  # 1V RMS in 50R = 13.01 dBm
+            case 'dBc':
+                offset_db = -max(data)
+            case _:
+                raise ValueError("Unknown unit: ", self.units)
+        if offset_db != 0:
+            data += offset_db
 
         # Rescale frequency data to required span
         dfpix = (fmax - fmin) / width  # df per pixel
@@ -103,7 +130,7 @@ class SpectrumWidget(Canvas):
             array = np.array([plotx, ploty]).reshape(size * 2, order='F')
             self.create_line(array.tolist(), fill=TRACE_COLOR)
 
-    def draw_grid(self):
+    def draw_grid(self) -> None:
         """Draw the grid lines and label them"""
 
         # Draw horizontal grid lines
@@ -127,7 +154,7 @@ class SpectrumWidget(Canvas):
             self.create_text(x, y + 3, text=label, anchor=N, fill=TEXT_COLOR)
             f = f + step
 
-    def freq_to_pixel(self, freq):
+    def freq_to_pixel(self, freq: float) -> float:
         """Convert frequency to pixel offset."""
         width = PLOT_WIDTH
         fmin = self.fmin
@@ -136,7 +163,7 @@ class SpectrumWidget(Canvas):
 
         return (freq - fmin) / dfpix
 
-    def grid_scale(self, minv, maxv):
+    def grid_scale(self, minv: float, maxv: float) -> tuple[float, float, float]:
         """ Find nice round numbers for labelling the axes"""
         rng = util.ceil_nice_number(maxv - minv)
         step = util.round_nice_number(rng / (self.ntick - 1))

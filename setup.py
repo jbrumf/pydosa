@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+
 from pydosa import __version__
 
 setup(
@@ -28,6 +29,7 @@ setup(
     install_requires=[
         'python-vxi11>=0.9',
         'numpy',
-        'scipy'
+        'scipy',
+        'pytest'
     ]
 )

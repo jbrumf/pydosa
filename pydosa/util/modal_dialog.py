@@ -10,7 +10,7 @@ from tkinter import Frame, Toplevel, Button
 class ModalDialog(Toplevel):
     """Base class for Tkinter modal dialog."""
 
-    def __init__(self, parent, title=None):
+    def __init__(self, parent, title: str = None):
         """Initialization"""
         Toplevel.__init__(self, parent)
         self.parent = parent
@@ -31,7 +31,7 @@ class ModalDialog(Toplevel):
                                   parent.winfo_rooty() + 50))
         self.wait_window(self)  # Wait until dialog closed
 
-    def create_buttons(self):
+    def create_buttons(self) -> None:
         """Override to add custom button frame"""
         button_frame = Frame(self)
         button1 = Button(button_frame, text='OK', width=8, padx=10,
@@ -45,19 +45,19 @@ class ModalDialog(Toplevel):
         self.bind("<Escape>", self.cancel_callback)
         button_frame.pack(padx=5, pady=5)
 
-    def create_content(self, content_frame):
+    def create_content(self, content_frame) -> None:
         """Override to create content"""
         pass
 
-    def validate(self):
+    def validate(self) -> bool:
         """Override to validate content"""
         return True
 
-    def ok_action(self):
+    def ok_action(self) -> None:
         """Override to handle OK action"""
         pass
 
-    def ok_callback(self, event=None):
+    def ok_callback(self, event=None) -> None:
         """Handle callback from OK button"""
         if not self.validate():
             return
@@ -68,7 +68,7 @@ class ModalDialog(Toplevel):
         self.parent.focus_set()
         self.destroy()  # Destroy the window
 
-    def cancel_callback(self, event=None):
+    def cancel_callback(self, event=None) -> None:
         """Handle callback from Cancel button"""
         self.parent.focus_set()
         self.destroy()  # Destroy the window

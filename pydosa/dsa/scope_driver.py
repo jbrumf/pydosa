@@ -7,49 +7,51 @@ Copyright (c) 2020 Jon Brumfitt
 
 from abc import ABC, abstractmethod
 
+from numpy import array as npa
+
 
 class ScopeDriver(ABC):
     """Abstract base class for an oscilloscope driver."""
 
     @property
     @abstractmethod
-    def make(self):
+    def make(self) -> str:
         """Abstract property for the make of instrument."""
         pass
 
     @property
     @abstractmethod
-    def models(self):
+    def models(self) -> list[str]:
         """Abstract property for list of model numbers."""
         pass
 
     @property
     @abstractmethod
-    def min_firmware(self):
+    def min_firmware(self) -> str:
         """Abstract property for the minimum firmware version."""
         pass
 
     @property
     @abstractmethod
-    def sample_rates(self):
+    def sample_rates(self) -> list[str]:
         """Abstract property for the list of sample rates."""
         pass
 
     @property
     @abstractmethod
-    def sample_sizes(self):
+    def sample_sizes(self) -> list[str]:
         """Abstract property for the list of sample sizes."""
         pass
 
     @property
-    def initial_sample_size(self):
+    def initial_sample_size(self) -> str:
         """Property for default sample size.
            The default is the first value in the list.
         """
         return self.sample_sizes[0]
 
     @property
-    def initial_sample_rate(self):
+    def initial_sample_rate(self) -> str:
         """Property for default sample rate.
            The default is the first value in the list.
         """
@@ -74,7 +76,7 @@ class ScopeDriver(ABC):
         pass
 
     @abstractmethod
-    def fetch_data(self, nsamples, srate_option) -> None:
+    def fetch_data(self, nsamples: int, srate_option: str) -> tuple[npa, float]:
         """Acquire sample data, scaled to volts
         :param nsamples: Number of samples
         :param srate_option: Sample rate

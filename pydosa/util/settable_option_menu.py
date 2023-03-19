@@ -19,14 +19,14 @@ class SettableOptionMenu(OptionMenu):
         if 'command' in kwargs:
             self.command = kwargs['command']
 
-    def set_items(self, items):
+    def set_items(self, items: list[str]) -> None:
         """Replace the list of items"""
         menu = self['menu']
         menu.delete(0, 'end')
         for s in items:
             menu.add_command(label=s, command=lambda x=s: self.option_callback(x))
 
-    def option_callback(self, option):
+    def option_callback(self, option) -> None:
         """Callback to set the selected option."""
         self.variable.set(option)
         if self.command is not None:

@@ -9,8 +9,11 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 
-from pydosa.sim.siggen import SigGen, quantize
 import numpy as np
+from numpy import array as npa
+
+from pydosa.sim.siggen import SigGen, quantize
+
 
 class WaveGen:
     """Signal generator to create test waveforms."""
@@ -33,7 +36,7 @@ class WaveGen:
         # Create a signal generator
         self.siggen = SigGen()
 
-    def generate(self, nsamples: int, srate: float):
+    def generate(self, nsamples: int, srate: float) -> npa:
         """Generate waveform samples.
 
         :param nsamples: Number of samples
@@ -43,7 +46,6 @@ class WaveGen:
         The signal values are in volts.
         """
         self.siggen.set(nsamples, srate)
-
 
         match self.wave:
             case "sine":

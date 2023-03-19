@@ -4,7 +4,8 @@ GUI dialog for entering spectrum analyzer preferences.
 Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
-from tkinter import Entry, StringVar, Label
+from configparser import ConfigParser
+from tkinter import Entry, StringVar, Label, Frame
 
 from pydosa.util.modal_dialog import ModalDialog
 
@@ -16,12 +17,12 @@ class PreferencesDialog(ModalDialog):
     """GUI dialog for entering spectrum analyzer preferences."""
 
     @classmethod
-    def ask(cls, parent, config):
+    def ask(cls, parent, config: ConfigParser) -> bool:
         """Show the dialog and return updated preferences."""
         dialog = PreferencesDialog(parent, config)
         return dialog.result
 
-    def __init__(self, parent, config):
+    def __init__(self, parent, config: ConfigParser):
         """Initialization"""
         self.config = config
         if not config.has_section('DEVICE'):
@@ -38,7 +39,7 @@ class PreferencesDialog(ModalDialog):
         self.result = False
         ModalDialog.__init__(self, parent, 'Preferences')
 
-    def create_content(self, master):
+    def create_content(self, master: Frame) -> None:
         """Create the dialog widgets."""
         self.v1 = StringVar()
         self.v1.set(self.server)
@@ -54,7 +55,7 @@ class PreferencesDialog(ModalDialog):
         # self.e2 = Entry(master, textvariable=self.v2)
         # self.e2.grid(row=1, column=1)
 
-    def ok_action(self):
+    def ok_action(self) -> None:
         """Callback for press of OK button"""
         try:
             device = self.config['DEVICE']

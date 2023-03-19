@@ -9,11 +9,13 @@ from tkinter import messagebox
 
 import vxi11
 
+from pydosa.dsa.scope_driver import ScopeDriver
 from pydosa.util.chooser_dialog import ChooserDialog
+from pydosa.util.preferences_manager import PreferencesManager
 from pydosa.util.util import compatible_version
 
 
-def choose_instrument(prefs, root):
+def choose_instrument(prefs: PreferencesManager, root) -> ScopeDriver | None:
     """Choose a VXI-11 instrument and locate a compatible driver."""
     plugins = prefs.config['DEVICE']['plugins'].split(',')
 
@@ -63,7 +65,7 @@ def choose_instrument(prefs, root):
             raise Exception('No driver found for {}'.format(model))
 
     except Exception as exc:
-        messagebox.showerror("Error", exc, parent=root)
+        messagebox.showerror("Error", str(exc), parent=root)
         return None
 
     # Instantiate driver and connect it to instrument
