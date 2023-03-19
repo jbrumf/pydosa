@@ -43,6 +43,7 @@ class Driver(ScopeDriver):
         """Configure the oscilloscope."""
         self.__scope.write('STOP')  # Put scope in a known state
         self.__scope.write('TRMD SINGLE')
+        self.__scope.write('ACQW SAMPLING')  # Normal acquisition mode
         self.__scope.write('MSIZ 14M')  # Must not be stopped for this
         self.__scope.write('STOP')
         self.__scope.write('CHDR OFF')  # Don't return headers
