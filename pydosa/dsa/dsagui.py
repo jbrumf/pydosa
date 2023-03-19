@@ -5,7 +5,6 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 import sys
-import time
 from tkinter import Frame, Button, Label, OptionMenu, StringVar, Menu
 from tkinter import Tk
 from tkinter import messagebox
@@ -79,7 +78,7 @@ class DsaGui(object):
         self._running = False
         self.analyzer = Analyzer()
         self.create_gui(root)
-        self.time = time.time()
+        self.init_menus()
 
     @property
     def running(self):
@@ -90,13 +89,13 @@ class DsaGui(object):
         self._running = value
         self.set_run_button(value)  # FIXME: Perhaps only if changed?
 
+
     # ---------- Application logic ----------
 
     def connect(self, driver):
         """Connect driver"""
         if driver is None:
-            self.setup_srate_menu([DESELECTED_ITEM], DESELECTED_ITEM)
-            self.setup_samples_menu([DESELECTED_ITEM], DESELECTED_ITEM)
+            self.init_menus()
             return
 
         # Configure instrument-specific menus
@@ -320,6 +319,13 @@ class DsaGui(object):
         self.wavegen = WaveGen(sim_config)
         self.wavepane = WavegenPanel(self.root, self.wavegen)
         self.wavepane.pack_forget()
+
+    # ---------- Menu re-configuration ----------
+
+    def init_menus(self):
+        """Initialize menus"""
+        self.setup_srate_menu([DESELECTED_ITEM], DESELECTED_ITEM)
+        self.setup_samples_menu([DESELECTED_ITEM], DESELECTED_ITEM)
 
     def setup_srate_menu(self, sample_rates: list[str], initial_rate: str):
         """Set up the sample rate menu."""
