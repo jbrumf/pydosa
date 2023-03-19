@@ -142,8 +142,7 @@ class DsaGui(object):
 
             # Update spectrum plot)
             self.plotter.set_range(self.fstart, self.fstop)
-            self.plotter.set_sample_rate(sample_rate)
-            self.plotter.plot_spectrum(data)
+            self.plotter.plot_spectrum(data, sample_rate)
 
             # Update info panel
             ns = len(wave)
@@ -159,10 +158,7 @@ class DsaGui(object):
 
         elif self.thread is None:
             # FIXME: No need to redraw unless there has been a change event
-            # Just draw the grid and axis labels
-            self.plotter.delete("all")
-            self.plotter.set_range(self.fstart, self.fstop)
-            self.plotter.draw_grid()
+            self.plotter.clear(self.fstart, self.fstop)
             self.root.update()
         self.root.after(10, self.run_loop)
 

@@ -42,7 +42,6 @@ class SpectrumWidget(Canvas):
 
         self.fmin = 0
         self.fmax = 1e7
-        self.sample_rate = 1e9
         self.ntick = FTICKS
         self.dbscale = 10
         self.level = 0
@@ -52,18 +51,18 @@ class SpectrumWidget(Canvas):
         self.fmin = fmin
         self.fmax = fmax
 
-    def set_sample_rate(self, rate):
-        """Set the sample rate."""
-        self.sample_rate = rate
+    def clear(self, fstart, fstop):
+        """Clear spectrum, just leaving grid"""
+        self.set_range(fstart, fstop)
+        self.delete("all")
+        self.draw_grid()
 
-    def plot_spectrum(self, data):
+    def plot_spectrum(self, data, srate):
         """Plot the spectrum"""
-
         width = PLOT_WIDTH  # X pixels
         nsamp = len(data)  # No. of FFT bins
         fmin = self.fmin
         fmax = self.fmax
-        srate = float(self.sample_rate)
 
         # Rescale frequency data to required span
         dfpix = (fmax - fmin) / width  # df per pixel
