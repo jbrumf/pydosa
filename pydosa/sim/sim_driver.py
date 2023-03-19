@@ -6,7 +6,7 @@ Copyright (c) 2020 Jon Brumfitt
 """
 
 from pydosa.dsa.scope_driver import ScopeDriver
-
+from pydosa.util.units import decode_unit_prefix
 
 class SimDriver(ScopeDriver):
     """Adapter to make the WaveGen look like an instrument driver."""
@@ -33,8 +33,9 @@ class SimDriver(ScopeDriver):
         pass
 
     def fetch_data(self, nsamples, srate_option):
-        return self.wavegen.generate(nsamples, srate_option)
+        srate = decode_unit_prefix(srate_option)
+        return self.wavegen.generate(nsamples, srate)
 
     def close(self):
         """Close the WaveGen."""
-        self.wavegen.close()
+        pass
