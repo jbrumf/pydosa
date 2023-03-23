@@ -57,5 +57,4 @@ class TestAnalyzer:
         for name in ['Hanning', 'Flat-Top', 'Blackman']:
             win, loss = get_window(name, n)
             gain = 20 * math.log10(sum(win) / n)
-            print('\n', loss, gain)
             nt.assert_almost_equal(loss, -gain, decimal=2)

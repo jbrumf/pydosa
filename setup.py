@@ -19,7 +19,7 @@ setup(
     classifiers=[
         'Programming Language :: Python :: 3',
         'Development Status :: 2 - Pre-Alpha',
-        # 'url="https://github.com/jbrumf/pydosa"',
+        'url="https://github.com/jbrumf/pydosa"',
         'License :: OSI Approved :: MIT License'
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering',
