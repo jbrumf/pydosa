@@ -64,13 +64,6 @@ class Driver(ScopeDriver):
         _ = self._scope.ask('INR?')  # Clear status
         self._scope.write('ARM')
 
-        # Wait for acquisition to complete
-        for i in range(100):
-            inr = int(self._scope.ask('INR?'))
-            if inr & 1 == 1:
-                break
-            time.sleep(0.02)
-
         # Get the samples from the scope and scale to volts
         self._scope.write('WFSU SP,1,NP,{},FP,0'.format(self.nsamples))
         self._scope.write('C1:WF? DAT2')
