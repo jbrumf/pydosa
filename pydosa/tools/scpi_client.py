@@ -2,11 +2,11 @@
 """
 Interactive command-line SCPI client.
 
-Avoid commands that return binary data as these are not
-handled correctly.
+Replies with '#' in the first 15 bytes are assumed to be IEEE
+binary blocks and are printed as bytes instead of ASCII.
 
-The host can be set using command-line options:
-  --host <IP|hostname>
+The host can be set using the command-line option:
+  -s <IP|hostname>
 
 Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
@@ -20,10 +20,11 @@ import sys
 import vxi11
 
 DEFAULT_HOST = "192.168.1.5"
+ENCODING = 'utf-8'
 
 
 def scpi(host):
-    """Connect to device at specified host and port"""
+    """Connect to device at specified host"""
 
     # Read history file if it exists
     histfile = os.path.join(os.environ["HOME"], ".scpihist")
@@ -35,25 +36,35 @@ def scpi(host):
 
     # Open a connection to the instrument
     instr = vxi11.Instrument(host)
-    command = '*IDN?'
-    print(instr.ask(command))
+    print(instr.ask('*IDN?'))
 
     try:
         while True:
             command = input("scpi> ").strip()
-            print()
             if command.lower() == "exit":
                 break
             if command.find('?') < 0:
                 instr.write(command)
             else:
-                print("[", command, "]")
-                print(instr.ask(command))
+                instr.write(command)
+                reply = instr.read_raw()
+                # Check for IEEE definite-length block
+                if b'#' in reply[0:15]:
+                    print_short_hex(reply)
+                else:
+                    print(reply.decode(ENCODING).rstrip('\r\n'))
+            print()
+
     except EOFError:  # CNTL-D to exit
         pass
-    print("Exit")
     instr.close()
 
+def print_short_hex(data, start=20, stop=3):
+    """Print hex abbreviated with an elipsis"""
+    if len(data) <= start + stop:
+        print(data)
+    else:
+        print(str(data[0:start])[0:-1], '...', str(data[-stop:])[2:])
 
 def usage():
     """Print a command-line usage message"""
