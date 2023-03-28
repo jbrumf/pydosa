@@ -19,8 +19,12 @@ import sys
 
 import vxi11
 
+from pydosa.util.util import elide_bytes
+
 DEFAULT_HOST = "192.168.1.5"
 ENCODING = 'utf-8'
+INITIAL_BYTES = 20  # Maximum bytes to print at start of hex string
+FINAL_BYTES = 3  # Minimum bytes to print at start of hex string
 
 
 def scpi(host):
@@ -50,7 +54,7 @@ def scpi(host):
                 reply = instr.read_raw()
                 # Check for IEEE definite-length block
                 if b'#' in reply[0:15]:
-                    print_short_hex(reply)
+                    print(elide_bytes(reply, INITIAL_BYTES, FINAL_BYTES))
                 else:
                     print(reply.decode(ENCODING).rstrip('\r\n'))
             print()
@@ -59,12 +63,6 @@ def scpi(host):
         pass
     instr.close()
 
-def print_short_hex(data, start=20, stop=3):
-    """Print hex abbreviated with an elipsis"""
-    if len(data) <= start + stop:
-        print(data)
-    else:
-        print(str(data[0:start])[0:-1], '...', str(data[-stop:])[2:])
 
 def usage():
     """Print a command-line usage message"""

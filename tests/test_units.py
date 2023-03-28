@@ -10,6 +10,8 @@ from pydosa.util.units import encode_metric_prefix
 
 
 def test_decode_unit_prefix():
+    """Test decode_unit_prefix method with generic examples"""
+
     # Without unit prefix
     assert decode_unit_prefix('0') == 0
     assert decode_unit_prefix('12') == 12
@@ -38,6 +40,8 @@ def test_decode_unit_prefix():
 
 
 def test_decode_unit_prefix_siglent():
+    """Test decode_unit_prefix method with actual Siglent versions"""
+
     # SARA for SDS1000X-E series
     assert decode_unit_prefix('1.00E+09') == 1E9
     assert decode_unit_prefix('5.00E+08') == 5E8
@@ -61,6 +65,8 @@ def test_decode_unit_prefix_siglent():
 
 
 def test_encode_metric_prefix():
+    """Test encode_metric_prefix method"""
+
     # Test scaling and suffix for each decade
     assert encode_metric_prefix(0.0) == "0"
     assert encode_metric_prefix(1.2E-9) == "1.2n"

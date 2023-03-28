@@ -5,8 +5,6 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 
-import time
-
 import numpy as np
 
 from pydosa.dsa.scope_driver import ScopeDriver

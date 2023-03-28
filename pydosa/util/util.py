@@ -85,3 +85,18 @@ def compatible_version(required: str, actual: str) -> bool:
     req = required.split(',')
     act = actual.split(',')
     return act >= req
+
+
+def elide_bytes(data: bytes, start: int = 20, stop: int = 3) -> str:
+    """Format bytes and elide with ellipsis if too long.
+       The whole string is returned if len <= start+stop.
+       :param data: The bytes to be formatted
+       :param start: Maximum number of bytes at start
+       :param stop: Maximum number of bytes at end
+       :return: elided string"""
+    if len(data) <= start + stop:
+        return str(data)
+    else:
+        first = str(data[0:start])[0:-1]
+        last = '' if stop == 0 else str(data[-stop:])[2:]
+        return '{} ... {}'.format(first, last)

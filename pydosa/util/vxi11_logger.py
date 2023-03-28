@@ -5,6 +5,8 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2023 Jon Brumfitt
 """
 
+from pydosa.util.util import elide_bytes
+
 
 def log(*args):
     """Log a message"""
@@ -31,9 +33,14 @@ class VxiLogger:
 
     def read_raw(self) -> bytes:
         """Read and return raw bytes"""
-        result = self.instrument.read_raw()
-        log('  read_raw ->', len(result), 'bytes')
-        return result
+        raw = self.instrument.read_raw()
+        log('  read_raw ->', len(raw), 'bytes')
+        # Check for IEEE definite-length block
+        if b'#' in raw[0:15]:
+            log('  ', elide_bytes(raw, 20, 3))
+        else:
+            log('  read_raw ->', len(raw), 'bytes')
+        return raw
 
     def close(self):
         """Close the instrument connection"""

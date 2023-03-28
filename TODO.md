@@ -4,32 +4,30 @@
 
 #### Known Issues
 
-- You can bring up multiple instrument chooser dialogs.
+- The instrument chooser dialog should be modal. At the moment, it is possible to open more than one.
 
-- Simulator window sometimes loses simulator control panel if
-  dragged to another screen.
+- The spectrum can obscure the frequency labels. The Y values should be clipped at the X axis.
 
-- Spectrum can obscure the frequency labels. Need to clip Y.
-
-- Power at Nyquist frequency should be halved as nsamples is even.
+- The power in the Nyquist frequency bin should be halved when the number of samples is even.
 
 #### Proposed Enhancements:
 
-- Add driver for Rigol DS1000Z series oscilloscopes (currently under development).
+- Add a driver for the Rigol DS1000Z series oscilloscopes (currently under development).
 
-- The GUI is pixel based. It may need scaling option for hi-resolution displays (e.g. 3840x2160). The plot size could be
-  configurable parameters.
+- The GUI is pixel based. It may need a scaling option for high-resolution displays (e.g. 3840x2160). The plot size
+  could be a configurable parameter.
 
-- Add option to enter explicit IP address. This may be useful if a firewall is blocking port 111 (TBC).
-
-- The 'delay' property could be reintroduced now that sim runs in thread
-
-- The process 'after' loop keeps running when in the paused state or no instrument is open.
+- Add an option to specify an explicit IP address as an alternative to VXI-11 device discovery. This would be helpful
+  when a firewall is blocking port 111.
 
 #### Simulator Enhancements
 
-- Option to set # quantisation levels & Volts full-scale
+- It would be more natural to specify the number of quantization bits and vertical range than the delta-V per level.
 
 #### Enhancements to Consider
 
-- Should scope driver 'prepare' method cancel any math mode or decoding mode?
+- The scope driver 'prepare' method should perhaps cancel any math mode or decoding mode.
+
+### Minor Remarks
+
+- The process 'after' loop keeps running when in the paused state or no instrument is open.
