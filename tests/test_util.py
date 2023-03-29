@@ -114,13 +114,13 @@ def test_elide_bytes():
     """Test elide_bytes method"""
 
     bs = b'\x00\x01\x02\x03\x04\x05\x06'
-    # All data omitted
+    # All bytes elided
     assert elide_bytes(bs, 0, 0) == "b' ... "
-    # Data omitted at start
+    # Bytes elided at start
     assert elide_bytes(bs, 0, 1) == "b' ... \\x06'"
-    # Data omitted at end
+    # Bytes elided at end
     assert elide_bytes(bs, 1, 0) == "b'\\x00 ... "
-    # Some bytes at each end
+    # Bytes elided in middle
     assert elide_bytes(bs, 3, 2) == "b'\\x00\\x01\\x02 ... \\x05\\x06'"
     # Start and end meet up
     assert elide_bytes(bs, 3, 4) == "b'\\x00\\x01\\x02\\x03\\x04\\x05\\x06'"

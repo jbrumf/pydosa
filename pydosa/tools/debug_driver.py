@@ -29,7 +29,7 @@ def main():
     data, srate = driver.fetch_data(NSAMPLES, SRATE)
 
     # Print the response
-    print('data=\n', data)
+    print('\ndata=', data)
     print('length=', len(data), ', srate=', srate)
 
     # Check that the actual nsamples and srate match those requested

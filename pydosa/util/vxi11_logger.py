@@ -17,8 +17,15 @@ def log(*args):
 class VxiLogger:
     """Logging wrapper for VXI-11 connection"""
 
-    def __init__(self, instrument):
+    def __init__(self, instrument, start_bytes=20, end_bytes=3):
+        """Ininialize logger.
+           :param instrument: The VXI-11 driver
+           :param start_bytes: Maximum start bytes in elided byte string
+           :param end_bytes: Maximum end bytes in elided byte string
+        """
         self.instrument = instrument
+        self.start_bytes = start_bytes
+        self.end_bytes = end_bytes
 
     def ask(self, scpi: str) -> str:
         """Send SCPI query and return the result"""
@@ -34,12 +41,8 @@ class VxiLogger:
     def read_raw(self) -> bytes:
         """Read and return raw bytes"""
         raw = self.instrument.read_raw()
-        log('  read_raw ->', len(raw), 'bytes')
-        # Check for IEEE definite-length block
-        if b'#' in raw[0:15]:
-            log('  ', elide_bytes(raw, 20, 3))
-        else:
-            log('  read_raw ->', len(raw), 'bytes')
+        log('read_raw ->', len(raw), 'bytes\n ',
+            elide_bytes(raw, self.start_bytes, self.end_bytes))
         return raw
 
     def close(self):

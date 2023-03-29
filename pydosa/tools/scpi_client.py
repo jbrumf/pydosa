@@ -23,8 +23,8 @@ from pydosa.util.util import elide_bytes
 
 DEFAULT_HOST = "192.168.1.5"
 ENCODING = 'utf-8'
-INITIAL_BYTES = 20  # Maximum bytes to print at start of hex string
-FINAL_BYTES = 3  # Minimum bytes to print at start of hex string
+START_BYTES = 20  # Maximum start bytes in elided byte string
+END_BYTES = 3  # Maximum end bytes in elided byte string
 
 
 def scpi(host):
@@ -54,7 +54,7 @@ def scpi(host):
                 reply = instr.read_raw()
                 # Check for IEEE definite-length block
                 if b'#' in reply[0:15]:
-                    print(elide_bytes(reply, INITIAL_BYTES, FINAL_BYTES))
+                    print(elide_bytes(reply, START_BYTES, END_BYTES))
                 else:
                     print(reply.decode(ENCODING).rstrip('\r\n'))
             print()
