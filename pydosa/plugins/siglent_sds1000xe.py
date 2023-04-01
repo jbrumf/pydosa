@@ -5,6 +5,8 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 
+import time
+
 import numpy as np
 
 from pydosa.dsa.scope_driver import ScopeDriver
@@ -61,6 +63,13 @@ class Driver(ScopeDriver):
         self._scope.write('TRMD SINGLE')
         _ = self._scope.ask('INR?')  # Clear status
         self._scope.write('ARM')
+
+        # Wait for acquisition to complete
+        for i in range(100):
+            inr = int(self._scope.ask('INR?'))
+            if inr & 1 == 1:
+                break
+            time.sleep(0.02)
 
         # Get the samples from the scope and scale to volts
         self._scope.write('WFSU SP,1,NP,{},FP,0'.format(self.nsamples))
