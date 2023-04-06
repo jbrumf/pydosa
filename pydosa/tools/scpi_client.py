@@ -18,6 +18,7 @@ import readline  # Don't delete: Enables history
 import sys
 
 import vxi11
+from vxi11.vxi11 import Vxi11Exception
 
 from pydosa.util.util import elide_bytes
 
@@ -42,9 +43,11 @@ def scpi(host):
     instr = vxi11.Instrument(host)
     print(instr.ask('*IDN?'))
 
-    try:
-        while True:
+    while True:
+        try:
             command = input("scpi> ").strip()
+            if len(command) == 0:
+                continue
             if command.lower() == "exit":
                 break
             if command.find('?') < 0:
@@ -59,8 +62,11 @@ def scpi(host):
                     print(reply.decode(ENCODING).rstrip('\r\n'))
             print()
 
-    except EOFError:  # CNTL-D to exit
-        pass
+        except Vxi11Exception as e:
+            print(e)
+
+        except EOFError:  # CNTL-D to exit
+            sys.exit()
     instr.close()
 
 
