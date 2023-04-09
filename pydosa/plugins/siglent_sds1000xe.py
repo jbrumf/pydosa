@@ -19,7 +19,7 @@ class Driver(ScopeDriver):
     # Instruments supported by this driver
     make = 'Siglent'
     models = ['SDS1104X-E', 'SDS1204X-E', 'SDS1104X-U']
-    min_firmware = '7.3.6.1.37R9'
+    min_firmware = '7.3.6.1.37R10'
 
     # Sample rates and corresponding times per division
     SRATE_TO_TDIV = {'1G': '1E-3', '500M': '2E-3', '250M': '5E-3',
@@ -33,7 +33,6 @@ class Driver(ScopeDriver):
     def __init__(self):
         """Initialization"""
         self._scope = None
-        self.nsamples = 0
 
     def open(self, instrument) -> None:
         """Open the driver."""
@@ -57,7 +56,6 @@ class Driver(ScopeDriver):
 
     def fetch_data(self, nsamples: int, srate_option: str) -> tuple[np.array, float]:
         """Acquire sample data, scaled to volts"""
-        self.nsamples = nsamples
         tdiv = self.SRATE_TO_TDIV[srate_option]
         self._scope.write('TDIV ' + tdiv)
         self._scope.write('TRMD SINGLE')
@@ -72,7 +70,7 @@ class Driver(ScopeDriver):
             time.sleep(0.02)
 
         # Get the samples from the scope and scale to volts
-        self._scope.write('WFSU SP,1,NP,{},FP,0'.format(self.nsamples))
+        self._scope.write('WFSU SP,1,NP,{},FP,0'.format(nsamples))
         self._scope.write('C1:WF? DAT2')
         data = self._scope.read_raw()
         vdiv = float(self._scope.ask('C1:VDIV?'))

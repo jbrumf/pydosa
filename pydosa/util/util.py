@@ -5,6 +5,8 @@ Licensed under MIT license: see LICENSE.txt
 Copyright (c) 2020 Jon Brumfitt
 """
 import math
+import re
+from itertools import zip_longest
 
 
 def round_nice_number(x: float) -> float:
@@ -78,13 +80,20 @@ def log_floor(x: float) -> float:
 
 def compatible_version(required: str, actual: str) -> bool:
     """Test that actual version number satisfies the required minimum version.
-
-    For example: compatible_version('7.1.6.1.33', '7.1.6.1.35R2').
-    Lexicographical ordering is assumed for each version field.
     """
-    req = required.split(',')
-    act = actual.split(',')
-    return act >= req
+    pattern = '0*([1-9][0-9]*|[a-zA-Z]+)'
+    req = re.findall(pattern, required)
+    act = re.findall(pattern, actual)
+    ok = True
+    for a, r in zip_longest(act, req, fillvalue=''):
+        if r.isnumeric() and a.isnumeric():
+            if int(a) > int(r):
+                return True
+            elif int(a) < int(r):
+                return False
+        else:
+            ok &= (r == '' or a == r)
+    return ok
 
 
 def elide_bytes(data: bytes, start: int = 20, stop: int = 3) -> str:

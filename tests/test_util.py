@@ -82,32 +82,31 @@ def test_compatible_version():
     assert compatible_version('1.2.3', '1.2.4')
     assert not compatible_version('1.2.4', '1.2.3')
     assert compatible_version('1.2', '1.2.3')
+    assert not compatible_version('1.2.3', '1.2')
+    assert compatible_version('1.2.3', '1.3')
     assert compatible_version('1.2.3', '1.2.3.4')
     assert compatible_version('1.2.3', '1.3.2')
     assert compatible_version('1.2.3', '1.3.2.1')
     assert compatible_version('1.2.3', '1.2.3R2')
+    assert compatible_version('1.2.3R2', '1.2.3R2')
+    assert compatible_version('1.2.3R2', '1.2.3R3')
+    assert not compatible_version('1.2.3R3', '1.2.3R2')
     assert not compatible_version('1.2.3R2', '1.2.3')
-    assert compatible_version('1.2.3R1', '1.2.3R2')
     assert not compatible_version('1.2.3R2', '1.2.3R1')
-    assert compatible_version('1.2.3', '1.2.3SP2')
-    assert not compatible_version('1.2.3SP2', '1.2.3')
-    assert compatible_version('1.2.3SP1', '1.2.3SP2')
-    assert not compatible_version('1.2.3SP2', '1.2.3SP1')
 
     # Lexicographical ordering does NOT support the following:
-    # assert compatible_version('1.2.3', '1.2.03')
-    # assert compatible_version('1.2.3', '1.2.12')
-    # assert compatible_version('1.2.3RC1', '1.2.3')
+    assert compatible_version('1.2.3', '1.2.03')
+    assert compatible_version('1.2.3', '1.2.12')
 
     # Test with actual Siglent version numbers
     assert not compatible_version('7.1.6.1.33', '7.1.6.1.26')
     assert compatible_version('7.1.6.1.33', '7.1.6.1.35R2')
+    assert compatible_version('7.1.6.1.37R9', '7.1.6.1.37R10')
 
     # Test with actual Rigol version numbers
     assert compatible_version('00.04.04.03.02', '00.04.04.04.03')
     assert compatible_version('00.04.04.03.02', '00.04.04.03.02')
-    assert compatible_version('00.04.03.02.03', '00.04.03.SP1')
-    assert not compatible_version('00.04.03.SP1', '00.04.03.02.03')
+    assert compatible_version('00.04.05.00.00', '00.04.05.01.00')
 
 
 def test_elide_bytes():

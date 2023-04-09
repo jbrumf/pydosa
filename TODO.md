@@ -4,11 +4,14 @@
 
 #### Known Issues
 
+- SDS1000X-U will not work with SDS1000X-E driver because the X-U firmware has independent version numbers. 
+
 - The instrument chooser dialog should be modal. At the moment, it is possible to open more than one.
 
 - The spectrum can obscure the frequency labels. The Y values should be clipped at the X axis.
 
 - The power in the Nyquist frequency bin should be halved when the number of samples is even.
+
 
 #### Proposed Enhancements:
 
