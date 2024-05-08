@@ -23,11 +23,11 @@ def get_window(name: str, nsamples: int) -> npa:
     """Return window function and its coherent power loss (dB)"""
     match name:
         case 'Hanning':
-            return sig.hann(nsamples), 6.021
+            return sig.windows.hann(nsamples), 6.021
         case 'Flat-Top':
-            return sig.flattop(nsamples), 13.328
+            return sig.windows.flattop(nsamples), 13.328
         case 'Blackman':
-            return sig.blackman(nsamples), 7.535
+            return sig.windows.blackman(nsamples), 7.535
         case 'Rectangle':
             return None, 0.0
         case _:
